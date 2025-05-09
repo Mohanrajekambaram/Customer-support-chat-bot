@@ -1,0 +1,23 @@
+import requests
+
+api_key = "YOUR_API_KEY"
+endpoint = "https://api.openai.com/v1/chat/completions"
+
+prompt = "You are a helpful assistant."
+messages = [{"role": "system", "content": prompt}]
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == "exit":
+        break
+    messages.append({"role": "user", "content": user_input})
+    payload = {"messages": messages}
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    response = requests.post(endpoint, json=payload, headers=headers)
+    data = response.json()
+    assistant_response = data['choices'][0]['message']['content']
+    print(f"Assistant: {assistant_response}")
+    messages.append({"role": "assistant", "content": assistant_response})
